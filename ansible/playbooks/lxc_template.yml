@@ -1,0 +1,9 @@
+---
+# Playbook FINO: descarga la plantilla LXC en los 3 nodos.
+- name: Descargar plantilla LXC en todos los nodos
+  hosts: proxmox_nodes
+  gather_facts: false
+  roles:
+    - lxc_template
+
+# ansible-playbook playbooks/lxc_template.yml

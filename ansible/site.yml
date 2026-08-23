@@ -3,5 +3,6 @@
 - import_playbook: playbooks/connectivity.yml   # 1. comprobar acceso
 - import_playbook: playbooks/ssh_trust.yml       # 2. confianza SSH entre nodos
 - import_playbook: playbooks/cluster_PVE.yml         # 3. formar el cluster
-# - import_playbook: playbooks/base.yml          # (futuro) rol 'base'
+- import_playbook: playbooks/pve_apitoken.yml     # 4. usuario/rol/token para OpenTofu
+- import_playbook: playbooks/lxc_template.yml      # 5. plantilla LXC en los 3 nodos 
 # - import_playbook: playbooks/k3s.yml           # (futuro) rol 'k3s'

@@ -1,0 +1,7 @@
+---
+# Playbook FINO: crea el token de OpenTofu. Se ejecuta en UN nodo (es cluster-wide).
+- name: Crear usuario/rol/token de API para OpenTofu
+  hosts: proxmox_nodes[0]
+  gather_facts: false
+  roles:
+    - pve_apitoken

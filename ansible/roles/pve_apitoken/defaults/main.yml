@@ -1,0 +1,3 @@
+---
+# Password del usuario OpenTofu-admin (para el lab). En real: usar Ansible Vault.
+opentofu_user_password: "useruser"

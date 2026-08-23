@@ -1,0 +1,52 @@
+---
+# Rol 'pve_apitoken': crea ROL + USUARIO + ACL + TOKEN de API para OpenTofu.
+#
+# La config de usuarios/roles/tokens es CLUSTER-WIDE (/etc/pve, replicado en los 3).
+# => se ejecuta en UN solo nodo (el playbook usa hosts: proxmox_nodes[0]).
+# Idempotente: si algo ya existe, se ignora el error "already exists".
+
+- name: Crear rol OpenTofuAdmin (privilegio minimo)
+  ansible.builtin.command: >
+    pveum role add OpenTofuAdmin -privs
+    "Datastore.AllocateSpace Datastore.Audit Pool.Allocate Sys.Audit Sys.Console Sys.Modify
+    VM.Allocate VM.Audit VM.Clone VM.Config.CDROM VM.Config.Cloudinit VM.Config.CPU
+    VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Config.Options
+    VM.Migrate VM.PowerMgmt SDN.Use"
+  register: r_role
+  changed_when: "'already exists' not in r_role.stderr"
+  failed_when: r_role.rc != 0 and 'already exists' not in r_role.stderr
+
+- name: Crear usuario OpenTofu-admin@pve
+  ansible.builtin.command: "pveum user add OpenTofu-admin@pve --password {{ opentofu_user_password }}"
+  register: r_user
+  changed_when: "'already exists' not in r_user.stderr"
+  failed_when: r_user.rc != 0 and 'already exists' not in r_user.stderr
+
+- name: Asignar rol OpenTofuAdmin al usuario en / (idempotente)
+  ansible.builtin.command: "pveum aclmod / -user OpenTofu-admin@pve -role OpenTofuAdmin"
+  changed_when: false
+
+- name: Crear token 'myToken' SIN privsep (hereda permisos del usuario)
+  ansible.builtin.command: "pveum user token add OpenTofu-admin@pve myToken --privsep 0 --output-format json"
+  register: r_token
+  changed_when: "'already exists' not in r_token.stderr"
+  failed_when: r_token.rc != 0 and 'already exists' not in r_token.stderr
+
+- name: Mostrar el SECRETO del token (SOLO aparece al crearlo la primera vez)
+  ansible.builtin.debug:
+    msg: >-
+      >>> COPIA ESTO en opentofu/terraform.tfvars como pve_token_secret:
+      {{ (r_token.stdout | from_json).value }}
+  when: r_token.changed
+
+- name: Aviso si el token ya existia
+  ansible.builtin.debug:
+    msg: >-
+      El token 'myToken' ya existia; su secreto NO se puede recuperar.
+      Si lo perdiste, borralo y recrealo: pveum user token remove OpenTofu-admin@pve myToken
+  when: not r_token.changed
+
+# COPIA ESTO en opentofu/terraform.tfvars como pve_token_secret: 77ba6925-1ad3-4b6d-bd07-c3717756c1bf"
+
+# listar las plantillas para LXC
+# ansible nodo1 -m shell -a "pveam update && pveam available --section system | grep -E 'debian'"

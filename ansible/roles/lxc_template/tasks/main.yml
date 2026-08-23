@@ -1,0 +1,13 @@
+---
+# Rol 'lxc_template': descarga la plantilla LXC en el almacenamiento 'local'.
+# Se ejecuta en LOS TRES nodos: 'local' es por-nodo (NO cluster-wide), asi que
+# cada nodo necesita su copia de la plantilla.
+
+- name: Actualizar la lista de plantillas disponibles
+  ansible.builtin.command: pveam update
+  changed_when: false
+
+- name: "Descargar la plantilla '{{ lxc_template_name }}' en {{ lxc_template_storage }} (si no esta)"
+  ansible.builtin.command: "pveam download {{ lxc_template_storage }} {{ lxc_template_name }}"
+  args:
+    creates: "/var/lib/vz/template/cache/{{ lxc_template_name }}"   # idempotente
