@@ -1,0 +1,6 @@
+---
+# Playbook MAESTRO: importa un playbook por area. Cada playbook llama a su(s) rol(es).
+- import_playbook: playbooks/connectivity.yml
+# - import_playbook: playbooks/base.yml       # (futuro) rol 'base'
+# - import_playbook: playbooks/cluster.yml    # (futuro) rol 'cluster'
+# - import_playbook: playbooks/k3s.yml        # (futuro) rol 'k3s'

@@ -1,0 +1,8 @@
+---
+# Playbook FINO: solo dice "en estos hosts, ejecuta estos roles".
+# La logica de verdad vive en el rol 'connectivity'.
+- name: Conectividad con los nodos Proxmox
+  hosts: proxmox_nodes
+  gather_facts: false
+  roles:
+    - connectivity

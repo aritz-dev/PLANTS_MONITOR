@@ -1,0 +1,5 @@
+---
+dependencies: []
+# lista de otros roles que deben ejecutarse ANTES que este. 
+#Esto sí es útil… pero solo si un rol depende de otro. 
+#El rol connectivity no depende de nada → está vacío → no aporta.

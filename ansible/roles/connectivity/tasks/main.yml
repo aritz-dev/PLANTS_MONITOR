@@ -1,0 +1,8 @@
+---
+# Tareas del rol 'connectivity': comprobar que Ansible llega a los nodos.
+- name: Comprobar conexion SSH (modulo ping, NO es ICMP)
+  ansible.builtin.ping:
+
+- name: Mostrar hostname e IP real del nodo
+  ansible.builtin.debug:
+    msg: "Conectado a {{ inventory_hostname }} ({{ node_ip }})"
