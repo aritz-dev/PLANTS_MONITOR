@@ -1,6 +1,7 @@
 ---
-# Playbook MAESTRO: importa un playbook por area. Cada playbook llama a su(s) rol(es).
-- import_playbook: playbooks/connectivity.yml
-# - import_playbook: playbooks/base.yml       # (futuro) rol 'base'
-# - import_playbook: playbooks/cluster.yml    # (futuro) rol 'cluster'
-# - import_playbook: playbooks/k3s.yml        # (futuro) rol 'k3s'
+# Playbook MAESTRO: importa un playbook por area, EN ORDEN.
+- import_playbook: playbooks/connectivity.yml   # 1. comprobar acceso
+- import_playbook: playbooks/ssh_trust.yml       # 2. confianza SSH entre nodos
+- import_playbook: playbooks/cluster_PVE.yml         # 3. formar el cluster
+# - import_playbook: playbooks/base.yml          # (futuro) rol 'base'
+# - import_playbook: playbooks/k3s.yml           # (futuro) rol 'k3s'

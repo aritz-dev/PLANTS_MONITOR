@@ -7,3 +7,9 @@ Comprueba que Ansible llega por SSH a los nodos y muestra su hostname/IP.
 - **meta/main.yml** — metadatos.
 
 Se invoca desde `playbooks/connectivity.yml`.
+
+## Uso
+```bash
+ansible-playbook site.yml                                    # ejecuta todo
+ansible-playbook playbooks/connectivity.yml --limit nodo1   # solo un area / un nodo
+```

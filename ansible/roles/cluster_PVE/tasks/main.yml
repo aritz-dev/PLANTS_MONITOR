@@ -1,0 +1,27 @@
+---
+# Rol 'cluster': forma el cluster Proxmox con pvecm (comandos, SIN modulos de comunidad).
+#
+# ORDEN (lo garantiza Ansible): la tarea de CREAR termina en todos los hosts antes de que
+# empiece la de UNIR (ejecucion tarea-a-tarea con barrera). 'throttle: 1' => uno a uno.
+#
+# Variables NUESTRAS en accion:
+#   cluster_name              -> group_vars (nombre del cluster)
+#   cluster_primary           -> group_vars (que nodo crea el cluster)
+#   node_ip                   -> inventario (IP real de ESTE nodo)
+#   hostvars[cluster_primary].node_ip -> IP real del nodo primario
+
+- name: "Crear cluster '{{ cluster_name }}' en el primario ({{ cluster_primary }} = {{ node_ip }})"
+  ansible.builtin.command: "pvecm create {{ cluster_name }} --link0 {{ node_ip }}"
+  args:
+    creates: /etc/pve/corosync.conf      # idempotencia: si ya hay cluster, no lo recrea
+  when: inventory_hostname == cluster_primary
+
+- name: "Unir {{ inventory_hostname }} ({{ node_ip }}) al cluster de {{ cluster_primary }} ({{ hostvars[cluster_primary].node_ip }})"
+  ansible.builtin.command: >
+    pvecm add {{ hostvars[cluster_primary].node_ip }}
+    --link0 {{ node_ip }}
+    --use_ssh
+  args:
+    creates: /etc/pve/corosync.conf
+  # throttle: 1                            # los nodos se unen de uno en uno (no funciona hay que hacer esto a nivel de play)
+  when: inventory_hostname != cluster_primary

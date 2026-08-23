@@ -1,0 +1,7 @@
+---
+# Playbook FINO: confianza SSH entre nodos. Logica en el rol 'ssh_trust'.
+- name: Confianza SSH root entre los nodos
+  hosts: proxmox_nodes
+  gather_facts: false
+  roles:
+    - ssh_trust

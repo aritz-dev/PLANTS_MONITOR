@@ -6,3 +6,6 @@ ansible_python_interpreter: /usr/bin/python3
 cluster_name: smartgarden
 cluster_network: 10.0.10.0/24
 cluster_gateway: 10.0.10.1
+
+# Nodo que CREA el cluster (el resto se unen a el). Variable nuestra.
+cluster_primary: nodo1

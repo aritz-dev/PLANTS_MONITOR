@@ -6,3 +6,11 @@
   gather_facts: false
   roles:
     - connectivity
+
+
+
+
+# gather_facts: false → cuando el rol NO necesita info del host (como el ping). Más rápido.
+# gather_facts: true (default) → cuando SÍ vas a decidir cosas según el host (OS, RAM, IP…).
+#
+#

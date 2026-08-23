@@ -1,25 +1,19 @@
 # Ansible — Smart Garden (nodos Proxmox)
 
-Automatización de los 3 nodos Proxmox desde WSL, vía port-forward de VirtualBox.
-
-**Filosofía: TODO va en roles.** Aunque sea un solo comando, se mete en un rol.
-Los playbooks son "finos": solo dicen *qué rol ejecutar en qué hosts*. Así todo tiene
-la MISMA estructura y no te lías.
-
----
+Automatización de los 3 nodos Proxmox desde WSL
 
 ## Requisitos previos
-
+192.168.1.141
 1. **Port-forward SSH** en VirtualBox: `2211->10.0.10.11:22`, `2212->...12:22`, `2213->...13:22`
 2. **Clave SSH**: `ssh-copy-id -p 2211 root@<IP_de_Windows>` (y 2212, 2213)
+Eso copia tu clave pública al authorized_keys de root en el nodo. A partir de ahí, Ansible entra solo.
+Now try logging into the machine, with:   "ssh -p 2212 'root@192.168.1.141'"
 
 ## Uso
 ```bash
 ansible-playbook site.yml                                    # ejecuta todo
 ansible-playbook playbooks/connectivity.yml --limit nodo1   # solo un area / un nodo
 ```
-
----
 
 ## Estructura
 

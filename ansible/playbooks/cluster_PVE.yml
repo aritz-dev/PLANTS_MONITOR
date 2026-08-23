@@ -1,0 +1,9 @@
+---
+# Playbook FINO: forma el cluster. La logica vive en el rol 'cluster'.
+- name: Formar el cluster Proxmox
+  hosts: proxmox_nodes
+  gather_facts: false
+  serial: 1 # para asegurarse de que cada nodo termina del todo, no se si realmente funciona, pendiente probar pero no quieor eliminar ya el cluster
+  roles:
+    - cluster_PVE
+# ansible nodo2 -m command -a "pvecm add 10.0.10.11 --link0 10.0.10.12 --use_ssh" por si al adñadir todos al cluster algunono entra por race conditions
