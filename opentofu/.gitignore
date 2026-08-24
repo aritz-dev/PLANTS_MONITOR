@@ -1,0 +1,7 @@
+# Secretos y estado: NUNCA a git
+terraform.tfvars
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+crash.log
